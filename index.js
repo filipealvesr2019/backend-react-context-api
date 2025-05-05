@@ -1,15 +1,11 @@
 const express = require("express");
 const app = express();
-const bcrypt = require("bcrypt");
+
 const mongoose = require("mongoose");
 require("dotenv").config();
-const Usuario = require('./models/Usuario')
-const jwt = require('jsonwebtoken')
-const rateLimit = require('express-rate-limit')
-const helmet = require('helmet')
+
 const cors = require('cors');
-const lusca = require('lusca');
-const session = require('express-session');
+
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
@@ -20,7 +16,6 @@ app.use(cors({
 
 
 
-app.use(helmet());
 // app.use(limiter);
 app.use(express.json());
 
