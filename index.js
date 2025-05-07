@@ -24,6 +24,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/produtos", async (req, res) => {
+  const { nome, preco } = req.body;
+  const produto = new Produto({ nome, preco});
+  await produto.save();
+  res.status(201).json(produto)
+})
 // Rota que lança um erro
 
 app.get("/erro", (req, res) => {
