@@ -7,6 +7,7 @@ require("dotenv").config();
 const cors = require('cors');
 
 const cookieParser = require("cookie-parser");
+const Produto = require("./models/Produto");
 app.use(cookieParser());
 
 app.use(cors({
@@ -24,12 +25,27 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/produtos", async (req, res) => {
+// rota para exibir produtos
+app.get("/Produtos", async (req, res) => {
+  const produtos = await Produto.find();
+  res.json(produtos);
+})
+
+// rota pra adicionar produto
+app.post("/produtos", async (req, res) => {
   const { nome, preco } = req.body;
   const produto = new Produto({ nome, preco});
   await produto.save();
   res.status(201).json(produto)
 })
+
+// rota pra adicionar ao carrinho
+app.post("/carrinho/adicionar/:id/:quantidade", async (req, res) => {
+  const { id, quantidade } = req.params;
+  const produto = await Produto.findById(id);
+  if(!produto) return res.status(404).json({})
+})
+
 // Rota que lança um erro
 
 app.get("/erro", (req, res) => {
