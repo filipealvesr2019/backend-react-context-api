@@ -43,7 +43,18 @@ app.post("/produtos", async (req, res) => {
 app.post("/carrinho/adicionar/:id/:quantidade", async (req, res) => {
   const { id, quantidade } = req.params;
   const produto = await Produto.findById(id);
-  if(!produto) return res.status(404).json({})
+  if(!produto) return res.status(404).json({ erro: "Produto não encontrado"});
+
+  const carrinhoItem = new Carrinho({
+    produtoId: produto._id,
+    nome: produto.nome,
+    preco: produto.preco,
+    quantidade
+  });
+
+  await carrinhoItem.save();
+
+  const carrinho = await Carrinho.find();
 })
 
 // Rota que lança um erro
