@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const cookieParser = require("cookie-parser");
 const Produto = require("./models/Produto");
+const Carrinho = require("./models/Carrinho");
 app.use(cookieParser());
 
 app.use(cors({
@@ -55,6 +56,13 @@ app.post("/carrinho/adicionar/:id/:quantidade", async (req, res) => {
   await carrinhoItem.save();
 
   const carrinho = await Carrinho.find();
+  res.json({ sucesso: true, carrinho})
+});
+
+// rota pra remover produto do carrinho
+app.post("/carrinho/remover/:id", async (req, res) => {
+  const item = await Carrinho.findById(req.params.id);
+  if(!item) return res.status(404).json({ erro: "Item não encontrado no carrinho"})
 })
 
 // Rota que lança um erro
