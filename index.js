@@ -62,11 +62,19 @@ app.post("/carrinho/adicionar/:id/:quantidade", async (req, res) => {
 // rota pra remover produto do carrinho
 app.post("/carrinho/remover/:id", async (req, res) => {
   const item = await Carrinho.findById(req.params.id);
-  if(!item) return res.status(404).json({ erro: "Item não encontrado no carrinho"})
+  if(!item) return res.status(404).json({ erro: "Item não encontrado no carrinho"});
+
+  await item.deleteOne();
+  const carrinho = await Carrinho.find();
+  res.json({ sucesso: true, carrinho});
+})
+
+app.get("carrinho", async (req, res) => {
+  const carrinho = await Carrinho.find();
+  res.json(carrinho);
 })
 
 // Rota que lança um erro
-
 app.get("/erro", (req, res) => {
   throw new Error("Erro simulado!");
 });
